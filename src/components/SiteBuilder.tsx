@@ -14,6 +14,7 @@ import {
 import { createHostingRequest } from "@/lib/cloudData";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { SitePreview } from "@/components/SitePreview";
 
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -184,9 +185,11 @@ export function SiteBuilder() {
         </Field>
       </div>
 
+      <div className="mt-8">
+        <SitePreview brand={brand} />
+      </div>
+
       <div className="mt-8 grid gap-4">
-
-
         <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold">Let us host it for you</h3>
