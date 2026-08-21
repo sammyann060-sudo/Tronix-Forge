@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { getPublicSupabaseEnv } from "./env";
 import type { Database } from "./types";
 
 function isNewSupabaseApiKey(value: string): boolean {
@@ -29,9 +30,12 @@ function createSupabaseClient() {
     typeof globalThis.process === "object" && globalThis.process && "env" in globalThis.process
       ? (globalThis.process.env as Record<string, string | undefined>)
       : {};
-  const SUPABASE_URL = import.meta.env["VITE_SUPABASE_URL"] || processEnv["SUPABASE_URL"];
-  const SUPABASE_PUBLISHABLE_KEY =
-    import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || processEnv["SUPABASE_PUBLISHABLE_KEY"];
+  const { url: SUPABASE_URL, publishableKey: SUPABASE_PUBLISHABLE_KEY } = getPublicSupabaseEnv({
+    SUPABASE_URL: processEnv["SUPABASE_URL"],
+    SUPABASE_PUBLISHABLE_KEY: processEnv["SUPABASE_PUBLISHABLE_KEY"],
+    VITE_SUPABASE_URL: import.meta.env["VITE_SUPABASE_URL"],
+    VITE_SUPABASE_PUBLISHABLE_KEY: import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"],
+  });
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [
