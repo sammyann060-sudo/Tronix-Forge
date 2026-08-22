@@ -2,7 +2,7 @@
  * Minimal Deriv WebSocket API client (browser only).
  * Docs: https://api.deriv.com/api-explorer
  */
-export const DERIV_APP_ID = 1089;
+export const DERIV_APP_ID = Number(import.meta.env["VITE_DERIV_APP_ID"] ?? 1089);
 export const DERIV_WS_URL = `wss://ws.derivws.com/websockets/v3?app_id=${DERIV_APP_ID}`;
 
 type AnyMsg = any;

@@ -193,7 +193,7 @@ export function SiteBuilder() {
         <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold">Let us host it for you</h3>
-            <Badge variant="secondary">M-Pesa</Badge>
+            <Badge variant="secondary">Free</Badge>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
             Give us up to three preferred domain names — we secure the first one that's available.

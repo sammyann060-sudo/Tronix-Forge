@@ -274,7 +274,6 @@ values
   ('Starter', 'AI Credits', '30 credits', 4.99, 10),
   ('Builder', 'AI Credits', '65 credits', 9.99, 20),
   ('Pro', 'AI Credits', '150 credits', 19.99, 30),
-  ('Website Basic', 'Site', '1 site + subdomain', 29.00, 40),
-  ('Website Pro', 'Site', '1 site + custom domain', 59.00, 50),
+  ('Free Website', 'Site', 'Site builder + hosting request', 0.00, 40),
   ('Signal Bot Order', 'AI Signals', '1 signal bot', 39.00, 60)
 on conflict do nothing;

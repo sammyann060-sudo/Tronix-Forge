@@ -42,10 +42,10 @@ export function googleFontHref(font: string) {
 
 export const USD_TO_KES = 129;
 
-/** One-off prices for a generated site. */
+/** Site creation and hosting requests are free; bot products carry the paid pricing. */
 export const SITE_PRICING = {
-  download: 29,
-  hosting: 79,
+  download: 0,
+  hosting: 0,
 } as const;
 
 export type HostingRequest = {

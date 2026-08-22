@@ -91,6 +91,7 @@ function LiveTradingPage() {
   const stopRef = useRef(false);
 
   useEffect(() => {
+    const selectedBotId = new URLSearchParams(window.location.search).get("botId");
     fetchMyDerivAccount()
       .then((a) => {
         setAccount(a);
@@ -98,7 +99,12 @@ function LiveTradingPage() {
       })
       .catch(() => undefined);
     fetchMyBots()
-      .then(setBots)
+      .then((loaded) => {
+        setBots(loaded);
+        if (selectedBotId && loaded.some((bot) => bot.id === selectedBotId)) {
+          setBotId(selectedBotId);
+        }
+      })
       .catch(() => undefined);
     return () => clientRef.current?.close();
   }, []);
@@ -111,6 +117,18 @@ function LiveTradingPage() {
   async function start() {
     if (!account) {
       toast.error("Link your Deriv account first on the Sites page");
+      return;
+    }
+    if (!Number.isFinite(stake) || stake <= 0) {
+      toast.error("Enter a valid stake above 0");
+      return;
+    }
+    if (!Number.isFinite(martingale) || martingale < 1) {
+      toast.error("Martingale must be 1 or higher");
+      return;
+    }
+    if (!Number.isFinite(takeProfit) || takeProfit <= 0 || !Number.isFinite(stopLoss) || stopLoss <= 0) {
+      toast.error("Take profit and stop loss must be above 0");
       return;
     }
     const bot = bots.find((b) => b.id === botId) ?? null;
@@ -229,7 +247,7 @@ function LiveTradingPage() {
             </Button>
           ) : (
             <Button onClick={start} className="bg-gradient-brand text-brand-foreground shadow-brand">
-              <Play className="size-4" /> Start bot
+              <Play className="size-4" /> Launch bot
             </Button>
           )
         }

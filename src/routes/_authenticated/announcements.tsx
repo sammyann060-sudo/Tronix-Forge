@@ -25,7 +25,7 @@ const items = [
     tag: "Payments",
     pinned: true,
     title: "M-Pesa checkout is live",
-    body: "You can now buy sites, AI credits and signal orders with M-Pesa. Choose M-Pesa at checkout, confirm the STK push, and your purchase unlocks instantly.",
+    body: "You can now buy AI credits and signal bot orders with M-Pesa. Creating and requesting hosting for sites is free.",
   },
   {
     date: "Aug 09, 2026",

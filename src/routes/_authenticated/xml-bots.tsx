@@ -183,7 +183,7 @@ function XmlBotsPage() {
                   <p className="line-clamp-3 text-sm text-muted-foreground">{b.description}</p>
                   <div className="mt-auto flex gap-2 pt-2">
                     <Button asChild size="sm" className="bg-gradient-brand text-brand-foreground">
-                      <Link to="/live-trading">
+                      <Link to="/live-trading" search={{ botId: b.id } as never}>
                         <PlayCircle className="size-4" /> Run bot
                       </Link>
                     </Button>

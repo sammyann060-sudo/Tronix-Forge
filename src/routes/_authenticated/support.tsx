@@ -45,7 +45,7 @@ const faqs = [
   },
   {
     q: "How do I pay with M-Pesa?",
-    a: "Choose M-Pesa at checkout, enter your Safaricom number and confirm the STK push on your phone. Credits and site purchases are unlocked instantly.",
+    a: "Choose M-Pesa at checkout, enter your Safaricom number and confirm the STK push on your phone. Credits and paid bot orders unlock after confirmation. Sites are free.",
   },
 ];
 
