@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Globe, Plus, ShieldAlert, ArrowRight, Rocket, DollarSign, Bot, CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Globe, Loader2, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -28,13 +28,6 @@ export const Route = createFileRoute("/_authenticated/")({
   }),
   component: SitesPage,
 });
-
-const stats = [
-  { label: "Sites", value: "0 / 5", icon: Globe },
-  { label: "Deployments", value: "0", icon: Rocket },
-  { label: "Earned", value: "$0.00", icon: DollarSign },
-  { label: "Bots", value: "0", icon: Bot },
-];
 
 function SitesPage() {
   const [token, setToken] = useState("");
@@ -88,107 +81,62 @@ function SitesPage() {
       <PageHeader
         icon={Globe}
         title="Create New Site"
-        subtitle="Choose how you'd like to launch your trading site"
-        action={
-          <Button size="lg" className="bg-gradient-brand text-brand-foreground shadow-brand">
-            <Plus className="size-4" /> New Site
-          </Button>
-        }
+        subtitle="Choose how you'd like to create your site"
       />
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="card-surface p-5">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">{label}</p>
-              <Icon className="size-4 text-muted-foreground" />
-            </div>
-            <p className="mt-2 font-display text-2xl font-bold">{value}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="mb-8 flex items-start gap-3 rounded-2xl border border-warning/40 bg-warning/10 p-5">
+      <div className="mb-8 rounded-2xl border border-success/30 bg-success/5 p-5">
         {account ? (
-          <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-success" />
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex min-w-0 items-center gap-3">
+              <CheckCircle2 className="size-5 shrink-0 text-success" />
+              <div className="min-w-0">
+                <p className="font-semibold">{account.login_id}</p>
+                <p className="text-sm text-muted-foreground">
+                  {account.account_type} account connected for site creation and bot launches.
+                </p>
+              </div>
+            </div>
+            <Badge variant="secondary">{account.currency}</Badge>
+          </div>
         ) : (
-          <ShieldAlert className="mt-0.5 size-5 shrink-0 text-warning" />
+          <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <ShieldAlert className="size-5 text-warning" />
+                <div>
+                  <p className="font-semibold">Deriv authentication required</p>
+                  <p className="text-sm text-muted-foreground">
+                    Link your Deriv account before launching live bots from the site.
+                  </p>
+                </div>
+              </div>
+              <Input
+                id="token"
+                placeholder="Enter your Deriv API token"
+                className="h-11"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                disabled={linking}
+              />
+              <div className="text-xs text-muted-foreground">
+                Required scopes: <Badge variant="secondary">read</Badge>{" "}
+                <Badge variant="secondary">trading_information</Badge>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleTokenLink} disabled={linking || !token.trim()}>
+                {linking && <Loader2 className="size-4 animate-spin" />}
+                Link Token
+              </Button>
+              <Button variant="outline" onClick={signInWithDeriv} disabled={linking}>
+                Sign in with Deriv
+              </Button>
+            </div>
+          </div>
         )}
-        <div>
-          <p className="font-semibold">{account ? "Deriv account linked" : "Deriv authentication required"}</p>
-          <p className="text-sm text-muted-foreground">
-            {account
-              ? `${account.login_id} is connected for live trading and bot launches.`
-              : "Link your Deriv account to launch bots and trade from your site."}
-          </p>
-        </div>
       </div>
 
-      <section className="card-surface p-6 lg:p-8">
-        <h2 className="text-2xl font-bold">Deriv API Authentication</h2>
-        <p className="mt-1 text-muted-foreground">
-          Creating sites is free. Deriv is only required when you want to launch and trade bots.
-        </p>
-
-        <div className="mt-6 rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm">
-          <p className="font-semibold">Important: permanent account binding</p>
-          <p className="mt-1 text-muted-foreground">
-            Once linked, your Deriv account cannot be changed or unlinked. Double-check you are
-            using the correct account.
-          </p>
-        </div>
-
-        <div className="mt-6 space-y-2">
-          <label htmlFor="token" className="text-sm font-medium">
-            Deriv API Token
-          </label>
-          <Input
-            id="token"
-            placeholder={account ? `Linked to ${account.login_id}` : "Enter your Deriv API token"}
-            className="h-12"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            disabled={linking}
-          />
-          <div className="text-sm text-muted-foreground">
-            Required scopes:{" "}
-            <Badge variant="secondary" className="mx-0.5">
-              read
-            </Badge>
-            <Badge variant="secondary">trading_information</Badge>
-          </div>
-        </div>
-
-        <div className="mt-6 space-y-3">
-          <Button
-            size="lg"
-            className="h-12 w-full bg-gradient-brand text-brand-foreground shadow-brand"
-            onClick={handleTokenLink}
-            disabled={linking || !token.trim()}
-          >
-            {linking && <Loader2 className="size-4 animate-spin" />}
-            Link with Token
-          </Button>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="h-px flex-1 bg-border" /> OR <span className="h-px flex-1 bg-border" />
-          </div>
-          <Button size="lg" variant="outline" className="h-12 w-full" onClick={signInWithDeriv} disabled={linking}>
-            Sign in with Deriv
-          </Button>
-        </div>
-      </section>
-
-      <div className="mt-6">
-        <SiteBuilder />
-      </div>
-
-      <Link
-        to="/tutorials"
-        className="mt-6 flex items-center justify-between rounded-2xl border border-border bg-card/60 p-5 transition-colors hover:bg-accent"
-      >
-        <span className="text-sm font-medium">New here? Watch the 6-episode beginner bootcamp</span>
-        <ArrowRight className="size-4" />
-      </Link>
+      <SiteBuilder />
     </AppShell>
   );
 }
